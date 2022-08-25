@@ -1,0 +1,16 @@
+{
+  "name": "cevit-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:barelyhuman/civet-web.git",
+  "author": "Reaper <ahoy@barelyhuman.dev>",
+  "license": "MIT",
+  "scripts": {
+    "build": "coffee --compile ./index.coffee",
+    "dev": "coffee --compile -w ./index.coffee"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "coffeescript": "^2.7.0"
+  }
+}
