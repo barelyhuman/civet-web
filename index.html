@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/prism-themes@1.9.0/themes/prism-nord.css"
+    />
+    <title>Civet Playground</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 align="center">Civet <small>Playground</small></h1>
+    <header>
+      <nav>
+        <a href="https://github.com/DanielXMoore/Civet">Civet ↗</a>
+        <a href="https://github.com/barelyhuman/civet-web">Github ↗</a>
+      </nav>
+    </header>
+    <div class="toolbar">
+      <button id="share-btn">Share</button>
+    </div>
+    <div class="container">
+      <div id="editor"></div>
+      <div id="preview" class="language-js"></div>
+    </div>
+    <div class="error-container">
+      <small class="text-error">Errors will show here:</small>
+      <p id="error-box" class="text-error"></p>
+    </div>
+    <script src="./copy.js"></script>
+    <script type="module" defer>
+      import { CodeJar } from "https://medv.io/codejar/codejar.js";
+      import { compile } from "https://esm.sh/@danielx/civet@0.2.7";
+      import prismjs from "https://cdn.skypack.dev/prismjs";
+
+      const defaultCode = `sum := (a:number, b:number) => a + b
+square := (a:number) => a * a
+
+fun := -> 
+  console.log "It's all fun and games till it breaks"
+
+song := ["do", "re", "mi", "fa", "so"]
+
+singers := {Jagger: "Rock", Elvis: "Roll"}
+
+bitlist := [
+  1, 0, 1
+  0, 0, 1
+  1, 1, 0
+];
+
+
+// hey jsx dudes... here
+Component := () => <>{bitlist.map (x) => <p>x</p> }</>`;
+
+      const editor = document.getElementById("editor");
+      const preview = document.getElementById("preview");
+      const errorBox = document.getElementById("error-box");
+      const shareButton = document.getElementById("share-btn");
+
+      let initialSourceCode = defaultCode;
+
+      if(window.location.hash){
+        const withoutHash = window.location.hash.trim().replace(/^#/,"");
+        initialSourceCode = atob(withoutHash);
+      }
+
+      const previewJar = CodeJar(
+        preview,
+        (c) => {
+          const out = Prism.highlight(
+            c.innerText,
+            Prism.languages.javascript,
+            "javascript"
+          );
+          c.innerHTML = out;
+        },
+        {
+          tab: " ".repeat(2),
+        }
+      );
+
+      const editorJar = CodeJar(editor, () => {}, {
+        tab: " ".repeat(2),
+      });
+
+      editorJar.onUpdate(async (c) => {
+        try {
+          const browserCompile = compile(c);
+          previewJar.updateCode(browserCompile);
+          errorBox.innerText = "";
+        } catch (err) {
+          errorBox.innerText = err.message;
+        }
+      });
+
+      editorJar.updateCode(initialSourceCode);
+      previewJar.updateCode(compile(initialSourceCode));
+
+      shareButton.addEventListener("click", (e) => {
+        const code = editorJar.toString();
+        const base64 = btoa(code);
+        window.location.hash = base64;
+        copyToClipboard(window.location.href);
+      });
+    </script>
+  </body>
+</html>
