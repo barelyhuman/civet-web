@@ -67,3 +67,5 @@ onShare =  ->
    window.location.hash = base64;
    copyToClipboard(window.location.href);
 
+shareButton.addEventListener("click",onShare)
+

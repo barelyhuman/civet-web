@@ -85,3 +85,5 @@ onShare = function() {
   window.location.hash = base64;
   return copyToClipboard(window.location.href);
 };
+
+shareButton.addEventListener("click", onShare);
