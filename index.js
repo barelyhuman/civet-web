@@ -7,7 +7,7 @@ import {
 
 import {
   compile
-} from "https://esm.sh/@danielx/civet@0.2.7";
+} from "https://esm.sh/@danielx/civet";
 
 import Prism from "https://cdn.skypack.dev/prismjs";
 

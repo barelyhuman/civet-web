@@ -1,5 +1,5 @@
 import { CodeJar } from "https://medv.io/codejar/codejar.js";
-import { compile } from "https://esm.sh/@danielx/civet@0.2.7";
+import { compile } from "https://esm.sh/@danielx/civet";
 import Prism from "https://cdn.skypack.dev/prismjs";
 
 defaultCode = """sum := (a:number, b:number) => a + b
